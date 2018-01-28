@@ -54,10 +54,14 @@ namespace FuzzyMapper
 
                     int theRowCounter = 0;
                     int theCellCounter = 0;
+                    this.upbProgressBar.Value = 0;
+                    this.upbProgressBar.Maximum = theWorksheet.Rows.Count();
+                    this.upbProgressBar.Step = 1;
 
                     //Iterate through all Worksheet rows
                     foreach (WorksheetRow theWorksheetRow in theWorksheet.Rows)
                     {
+                        this.upbProgressBar.PerformStep();
                         if (theRowCounter == 0)
                         {
                             //This is the Header Row. We are assuming that the Excel Worksheet's 
@@ -78,11 +82,9 @@ namespace FuzzyMapper
                                     //as the Column Name
                                     theDataColumn.ColumnName = theCellValue;
 
-                                    //Here we skip to the actual data row (the row below the header row) and
-                                    //set the data column's data type to the type that exists in the corresponding
-                                    //cell in the actual data row of the Worksheet
-                                    theDataColumn.DataType =
-                                        theWorksheet.Rows[theRowCounter + 1].Cells[theCellCounter].Value.GetType();
+
+                                    theDataColumn.DataType = Type.GetType("System.String");
+                                        //theWorksheet.Rows[theRowCounter + 1].Cells[theCellCounter].Value.GetType();
                                 }
                                 else
                                 {
@@ -140,6 +142,8 @@ namespace FuzzyMapper
             finally
             {
                 this.Cursor = Cursors.Default;
+                this.upbProgressBar.Value = 0;
+
             }
             return excelDataTable;
 
@@ -175,6 +179,8 @@ namespace FuzzyMapper
         }
 
         #endregion
+
+        #region Events
         private void ubtnSource_Click(object sender, EventArgs e)
         {
             try
@@ -196,12 +202,16 @@ namespace FuzzyMapper
                     foreach (DataColumn col in SourceDataTable.Columns)
                     {
                         ucSourceCol.ValueListItems.Add(col.ColumnName, col.ColumnName);
-                        //this.ucSourceCol.Items.Add(col.ColumnName, col.ColumnName);
                         this.ucSourceKeyCol.Items.Add(col.ColumnName, col.ColumnName);
                     }
+                    this.udsMapColumns.Rows.Clear();
+
                     this.ugMapColumns.DisplayLayout.Bands[0].Columns["SourceColumn"].ValueList = ucSourceCol;
-                    //this.ucSourceCol.SelectedIndex = 0;
+                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["SourceColumn"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.DropDownValidate;
+                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["SourceColumn"].AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
+                    
                     this.ucSourceKeyCol.SelectedIndex = 0;
+
                     this.utcTabControl.SelectedTab = this.ultraTabPageControl1.Tab;
 
                 }
@@ -238,8 +248,11 @@ namespace FuzzyMapper
                         //this.ucDestinationCol.Items.Add(col.ColumnName, col.ColumnName);
                         this.ucDestinationKeyCol.Items.Add(col.ColumnName, col.ColumnName);
                     }
-                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["DestinationColumn"].ValueList = ucDestinationCol;
+                    this.udsMapColumns.Rows.Clear();
 
+                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["DestinationColumn"].ValueList = ucDestinationCol;
+                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["DestinationColumn"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.DropDownValidate;
+                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["DestinationColumn"].AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
                     //this.ucDestinationCol.SelectedIndex = 0;
                     this.ucDestinationKeyCol.SelectedIndex = 0;
                     this.utcTabControl.SelectedTab = this.ultraTabPageControl2.Tab;
@@ -262,7 +275,6 @@ namespace FuzzyMapper
             try
             {
                 string source = "";
-                string sourceColumnName = "";//this.ucSourceCol.SelectedItem.DisplayText;
 
 
                 if (this.SourceDataTable != null && this.DestinationDataTable != null)
@@ -289,18 +301,16 @@ namespace FuzzyMapper
                     }
                     
                     
-                    if (this.ucMapType.SelectedIndex == 0)
+                    if (this.ucMapType.SelectedItem.DisplayText.Equals("Map"))
                     {
                         this.ugResults.DataSource = null;
                         this.ugResults.DataSource = this.SourceDataTable.Copy();
                         foreach (DataColumn col in this.DestinationDataTable.Columns)
                         {
-                            if (this.ugResults.DisplayLayout.Bands[0].Columns.IndexOf("Des-" + col.ColumnName) < 0)
-                                this.ugResults.DisplayLayout.Bands[0].Columns.Add("Des-" + col.ColumnName);
+                            this.ugResults.DisplayLayout.Bands[0].Columns.Add("Des-" + col.ColumnName);
                         }
                         this.ugResults.DisplayLayout.Bands[0].Columns.Add("Map%");
 
-                        Dictionary<string, string> FoundMatches = new Dictionary<string, string>();
 
                         this.upbProgressBar.Step = 1;
                         this.upbProgressBar.Maximum= this.ugResults.Rows.Count;
@@ -308,22 +318,62 @@ namespace FuzzyMapper
                         foreach (UltraGridRow row in this.ugResults.Rows)
                         {
                             this.upbProgressBar.PerformStep();
+                            Dictionary<int, Dictionary<string, string>> FoundMatchList = new Dictionary<int, Dictionary<string, string>>();
+                            Dictionary<string, string> FoundMatches = new Dictionary<string, string>();
+
                             bool matchFound = true;
-                            foreach (UltraGridRow urow in this.ugMapColumns.Rows)
+                            try
                             {
-                                source = row.Cells[urow.Cells["SourceColumn"].Value.ToString()].Value.ToString();
-                                FoundMatches = null;
-                                FoundMatches = FuzzySearch.Search_v3(source, DestinationValueLists[urow.Index], fuzzyness, this.ucAlgorithm.SelectedItem.DisplayText);
-                                if (FoundMatches.Count == 0)
+                                foreach (UltraGridRow urow in this.ugMapColumns.Rows)
                                 {
-                                    matchFound = false;
-                                    break;
+                                    source = row.Cells[urow.Cells["SourceColumn"].Value.ToString()].Value.ToString();
+                                    FoundMatches = null;
+                                    FoundMatches = FuzzySearch.Search_v3(source, DestinationValueLists[urow.Index], fuzzyness, this.ucAlgorithm.SelectedItem.DisplayText);
+                                    if (FoundMatches.Count == 0)
+                                    {
+                                        matchFound = false;
+                                        break;
+                                    }
+                                    FoundMatchList.Add(urow.Index, FoundMatches);
+
                                 }
-                                //FoundMatches = null;
+                            }
+                            catch (Exception ex)
+                            {
+
+                                throw ex;
                             }
 
-                            if(matchFound)
-                                AddResultRow(row, this.DestinationDataTable, FoundMatches.FirstOrDefault().Key, this.ucDestinationKeyCol.SelectedItem.DisplayText, "Des-");                           
+                            if (matchFound)
+                            {
+                                try
+                                {
+                                    Dictionary<string, string> ExactMatches = new Dictionary<string, string>();
+                                    if (FoundMatchList.Count == 1)
+                                    {
+                                        ExactMatches = FoundMatchList[0];
+                                    }
+                                    else
+                                    {
+                                        var intersectValues = FoundMatchList[0].Keys.ToList();
+                                        for (int i = 0; i < FoundMatchList.Count - 1; i++)
+                                        {
+                                            //var current = new Dictionary<string, string>(FoundMatchList[i]);
+                                            var next = new Dictionary<string, string>(FoundMatchList[i + 1]);
+                                            intersectValues = next.Keys.Where(x => intersectValues.Contains(x)).ToList();
+                                        }
+                                        if(intersectValues.Count>0)
+                                            ExactMatches.Add(intersectValues.FirstOrDefault(), "");
+
+                                    }
+                                    if (ExactMatches.Count > 0)
+                                        AddResultRow(row, this.DestinationDataTable, ExactMatches.FirstOrDefault().Key, this.ucDestinationKeyCol.SelectedItem.DisplayText, "Des-");
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw ex;
+                                }
+                            }
                         }
                     }
                     else
@@ -338,13 +388,16 @@ namespace FuzzyMapper
                         }
                         this.ugResults.DisplayLayout.Bands[0].Columns.Add("Map%");
 
-                        Dictionary<string, string> FoundMatches = new Dictionary<string, string>();
+
                         this.upbProgressBar.Step = 1;
                         this.upbProgressBar.Maximum = this.ugSource.Rows.Count;
 
                         foreach (UltraGridRow row in this.ugSource.Rows)
                         {
                             this.upbProgressBar.PerformStep();
+                            Dictionary<string, string> FoundMatches = new Dictionary<string, string>();
+                            Dictionary<int, Dictionary<string, string>> FoundMatchList = new Dictionary<int, Dictionary<string, string>>();
+
                             bool matchFound = true;
                             foreach (UltraGridRow urow in this.ugMapColumns.Rows)
                             {
@@ -356,10 +409,35 @@ namespace FuzzyMapper
                                     matchFound = false;
                                     break;
                                 }
+
+                                FoundMatchList.Add(urow.Index, FoundMatches);
                             }
                             if (matchFound)
                             {
-                                foreach (var item in FoundMatches)
+                                Dictionary<string, string> ExactMatches = new Dictionary<string, string>();
+                                if (FoundMatchList.Count == 1)
+                                {
+                                    ExactMatches = FoundMatchList[0];
+                                }
+                                else
+                                {
+                                    var intersectValues = FoundMatchList[0].Keys.ToList();
+                                    for (int i = 0; i < FoundMatchList.Count - 1; i++)
+                                    {
+                                        //var current = new Dictionary<string, string>(FoundMatchList[i]);
+                                        var next = new Dictionary<string, string>(FoundMatchList[i + 1]);
+                                        intersectValues = next.Keys.Where(x => intersectValues.Contains(x)).ToList();
+                                    }
+                                    foreach (var item in intersectValues)
+                                    {
+                                        if (!ExactMatches.ContainsKey(item))
+                                            ExactMatches.Add(item, "");
+                                    }
+                                    
+                                   
+                                }
+                                
+                                foreach (var item in ExactMatches)
                                 {
                                     DataRow dr = dtResults.NewRow();
                                     dtResults.Rows.Add(dr);
@@ -374,10 +452,10 @@ namespace FuzzyMapper
 
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
             finally
             {
@@ -399,13 +477,15 @@ namespace FuzzyMapper
                 if (savefile.ShowDialog() == DialogResult.OK)
                 {
                     this.Cursor = Cursors.WaitCursor;
-
-                    if(this.utcTabControl.ActiveTab == this.ultraTabPageControl1.Tab)
+                    
+                    if (this.utcTabControl.ActiveTab == this.ultraTabPageControl1.Tab)
                         this.ultraGridExcelExporter1.Export(this.ugSource, savefile.FileName);
                     else if (this.utcTabControl.ActiveTab == this.ultraTabPageControl2.Tab)
                         this.ultraGridExcelExporter1.Export(this.ugDestination, savefile.FileName);
                     else if (this.utcTabControl.ActiveTab == this.ultraTabPageControl3.Tab)
                         this.ultraGridExcelExporter1.Export(this.ugResults, savefile.FileName);
+
+                    savefile.OpenFile();
                 }
             }
             catch (Exception)
@@ -428,5 +508,7 @@ namespace FuzzyMapper
         {
             this.ugMapColumns.DeleteSelectedRows();
         }
+
+        #endregion
     }
 }

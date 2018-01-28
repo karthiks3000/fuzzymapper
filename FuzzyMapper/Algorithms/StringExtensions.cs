@@ -63,18 +63,18 @@ namespace FuzzyMapper
             var lcs = strA.LongestCommonSubsequence(strB);
             int leven = strA.LevenshteinDistance(strB);
             double levenCoefficient = 1.0 / (1.0 * (leven + 0.2)); //may want to tweak offset
-            string strAMp = strA.ToDoubleMetaphone();
-            string strBMp = strB.ToDoubleMetaphone();
-            int matchCount = 0;
-            if (strAMp.Length == 4 && strBMp.Length == 4)
-            {
-                for (int i = 0; i < strAMp.Length; i++)
-                {
-                    if (strAMp[i] == strBMp[i]) matchCount++;
-                }
-            }
-            double mpCoefficient = matchCount == 0 ? 0.0 : matchCount / 4.0;
-            double avgCoefficent = (dice + lcs.Item2 + levenCoefficient + mpCoefficient) / 4.0;
+            //string strAMp = strA.ToDoubleMetaphone();
+            //string strBMp = strB.ToDoubleMetaphone();
+            //int matchCount = 0;
+            //if (strAMp.Length == 4 && strBMp.Length == 4)
+            //{
+            //    for (int i = 0; i < strAMp.Length; i++)
+            //    {
+            //        if (strAMp[i] == strBMp[i]) matchCount++;
+            //    }
+            //}
+            //double mpCoefficient = matchCount == 0 ? 0.0 : matchCount / 4.0;
+            double avgCoefficent = (dice + lcs.Item2 + levenCoefficient ) / 3.0;
             return avgCoefficent;
         }
     }
