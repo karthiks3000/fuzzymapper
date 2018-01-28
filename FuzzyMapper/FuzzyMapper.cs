@@ -178,6 +178,18 @@ namespace FuzzyMapper
             }
         }
 
+        private void UpdateGridRowCounts(UltraGrid ug)
+        {
+            try
+            {
+                ug.Text = (ug.Rows.Count).ToString() + " Row(s) / " + (ug.Rows.VisibleRowCount-1).ToString() + " Visible Row(s)";
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         #endregion
 
         #region Events
@@ -213,7 +225,7 @@ namespace FuzzyMapper
                     this.ucSourceKeyCol.SelectedIndex = 0;
 
                     this.utcTabControl.SelectedTab = this.ultraTabPageControl1.Tab;
-
+                    UpdateGridRowCounts(this.ugSource);
                 }
             }
             catch (Exception)
@@ -256,6 +268,7 @@ namespace FuzzyMapper
                     //this.ucDestinationCol.SelectedIndex = 0;
                     this.ucDestinationKeyCol.SelectedIndex = 0;
                     this.utcTabControl.SelectedTab = this.ultraTabPageControl2.Tab;
+                    UpdateGridRowCounts(this.ugDestination);
 
                 }
             }
@@ -459,6 +472,8 @@ namespace FuzzyMapper
             }
             finally
             {
+                UpdateGridRowCounts(this.ugResults);
+
                 this.Cursor = Cursors.Default;
                 this.upbProgressBar.Value = 0;
             }
@@ -510,5 +525,22 @@ namespace FuzzyMapper
         }
 
         #endregion
+
+        private void ugSource_AfterRowFilterChanged(object sender, AfterRowFilterChangedEventArgs e)
+        {
+            UpdateGridRowCounts(this.ugSource);
+        }
+
+        
+
+        private void ugDestination_AfterRowFilterChanged(object sender, AfterRowFilterChangedEventArgs e)
+        {
+            UpdateGridRowCounts(this.ugDestination);
+        }
+
+        private void ugResults_AfterRowFilterChanged(object sender, AfterRowFilterChangedEventArgs e)
+        {
+            UpdateGridRowCounts(this.ugResults);
+        }
     }
 }

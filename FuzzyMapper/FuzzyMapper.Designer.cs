@@ -144,7 +144,7 @@
             // ultraTabPageControl1
             // 
             this.ultraTabPageControl1.Controls.Add(this.ugSource);
-            this.ultraTabPageControl1.Location = new System.Drawing.Point(1, 35);
+            this.ultraTabPageControl1.Location = new System.Drawing.Point(-10000, -10000);
             this.ultraTabPageControl1.Name = "ultraTabPageControl1";
             this.ultraTabPageControl1.Size = new System.Drawing.Size(1249, 518);
             // 
@@ -172,7 +172,7 @@
             this.ugSource.Name = "ugSource";
             this.ugSource.Size = new System.Drawing.Size(1249, 518);
             this.ugSource.TabIndex = 0;
-            this.ugSource.Text = "Results";
+            this.ugSource.AfterRowFilterChanged += new Infragistics.Win.UltraWinGrid.AfterRowFilterChangedEventHandler(this.ugSource_AfterRowFilterChanged);
             // 
             // ultraTabPageControl2
             // 
@@ -205,12 +205,12 @@
             this.ugDestination.Name = "ugDestination";
             this.ugDestination.Size = new System.Drawing.Size(1249, 518);
             this.ugDestination.TabIndex = 1;
-            this.ugDestination.Text = "Results";
+            this.ugDestination.AfterRowFilterChanged += new Infragistics.Win.UltraWinGrid.AfterRowFilterChangedEventHandler(this.ugDestination_AfterRowFilterChanged);
             // 
             // ultraTabPageControl3
             // 
             this.ultraTabPageControl3.Controls.Add(this.ugResults);
-            this.ultraTabPageControl3.Location = new System.Drawing.Point(-10000, -10000);
+            this.ultraTabPageControl3.Location = new System.Drawing.Point(1, 35);
             this.ultraTabPageControl3.Name = "ultraTabPageControl3";
             this.ultraTabPageControl3.Size = new System.Drawing.Size(1249, 518);
             // 
@@ -238,7 +238,7 @@
             this.ugResults.Name = "ugResults";
             this.ugResults.Size = new System.Drawing.Size(1249, 518);
             this.ugResults.TabIndex = 1;
-            this.ugResults.Text = "Results";
+            this.ugResults.AfterRowFilterChanged += new Infragistics.Win.UltraWinGrid.AfterRowFilterChangedEventHandler(this.ugResults_AfterRowFilterChanged);
             // 
             // ufrmFuzzyMapper
             // 
