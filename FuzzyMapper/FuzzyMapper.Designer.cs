@@ -50,6 +50,13 @@
             Infragistics.Win.Appearance appearance8 = new Infragistics.Win.Appearance();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FuzzyMapper));
             Infragistics.Win.Appearance appearance9 = new Infragistics.Win.Appearance();
+            Infragistics.Win.UltraWinGrid.UltraGridBand ultraGridBand1 = new Infragistics.Win.UltraWinGrid.UltraGridBand("Band 0", -1);
+            Infragistics.Win.UltraWinGrid.UltraGridColumn ultraGridColumn1 = new Infragistics.Win.UltraWinGrid.UltraGridColumn("SourceColumn");
+            Infragistics.Win.UltraWinGrid.UltraGridColumn ultraGridColumn2 = new Infragistics.Win.UltraWinGrid.UltraGridColumn("DestinationColumn");
+            Infragistics.Win.UltraWinGrid.UltraGridColumn ultraGridColumn3 = new Infragistics.Win.UltraWinGrid.UltraGridColumn("SearchList");
+            Infragistics.Win.UltraWinDataSource.UltraDataColumn ultraDataColumn1 = new Infragistics.Win.UltraWinDataSource.UltraDataColumn("SourceColumn");
+            Infragistics.Win.UltraWinDataSource.UltraDataColumn ultraDataColumn2 = new Infragistics.Win.UltraWinDataSource.UltraDataColumn("DestinationColumn");
+            Infragistics.Win.UltraWinDataSource.UltraDataColumn ultraDataColumn3 = new Infragistics.Win.UltraWinDataSource.UltraDataColumn("SearchList");
             this.ultraTabPageControl1 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
             this.ugSource = new Infragistics.Win.UltraWinGrid.UltraGrid();
             this.ultraTabPageControl2 = new Infragistics.Win.UltraWinTabControl.UltraTabPageControl();
@@ -75,21 +82,17 @@
             this.ulblPercent = new Infragistics.Win.Misc.UltraLabel();
             this.ubtnMap = new Infragistics.Win.Misc.UltraButton();
             this.ulblAccuracy = new Infragistics.Win.Misc.UltraLabel();
-            this.ulblSrcMatchCol = new Infragistics.Win.Misc.UltraLabel();
             this.ubtnSource = new Infragistics.Win.Misc.UltraButton();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.utxtDestination = new Infragistics.Win.UltraWinEditors.UltraTextEditor();
             this.utxtSource = new Infragistics.Win.UltraWinEditors.UltraTextEditor();
             this.ugrpSource = new Infragistics.Win.Misc.UltraGroupBox();
             this.ulblSrcKeyCol = new Infragistics.Win.Misc.UltraLabel();
-            this.ucSourceCol = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.ucSourceKeyCol = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this.ugrpDestination = new Infragistics.Win.Misc.UltraGroupBox();
             this.ulblDesKeyCol = new Infragistics.Win.Misc.UltraLabel();
             this.ubtnDestination = new Infragistics.Win.Misc.UltraButton();
             this.ucDestinationKeyCol = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
-            this.ulblDesMatchCol = new Infragistics.Win.Misc.UltraLabel();
-            this.ucDestinationCol = new Infragistics.Win.UltraWinEditors.UltraComboEditor();
             this._FuzzyMapper_UltraFormManager_Dock_Area_Left = new Infragistics.Win.UltraWinForm.UltraFormDockArea();
             this._FuzzyMapper_UltraFormManager_Dock_Area_Right = new Infragistics.Win.UltraWinForm.UltraFormDockArea();
             this._FuzzyMapper_UltraFormManager_Dock_Area_Top = new Infragistics.Win.UltraWinForm.UltraFormDockArea();
@@ -98,6 +101,11 @@
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.appStylistRuntime1 = new Infragistics.Win.AppStyling.Runtime.AppStylistRuntime(this.components);
             this.ultraGridExcelExporter1 = new Infragistics.Win.UltraWinGrid.ExcelExport.UltraGridExcelExporter(this.components);
+            this.ugrpMapColumns = new Infragistics.Win.Misc.UltraGroupBox();
+            this.ugMapColumns = new Infragistics.Win.UltraWinGrid.UltraGrid();
+            this.udsMapColumns = new Infragistics.Win.UltraWinDataSource.UltraDataSource(this.components);
+            this.ubtnAdd = new Infragistics.Win.Misc.UltraButton();
+            this.ubtnDelete = new Infragistics.Win.Misc.UltraButton();
             this.ultraTabPageControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ugSource)).BeginInit();
             this.ultraTabPageControl2.SuspendLayout();
@@ -122,12 +130,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.utxtSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ugrpSource)).BeginInit();
             this.ugrpSource.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ucSourceCol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ucSourceKeyCol)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ugrpDestination)).BeginInit();
             this.ugrpDestination.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ucDestinationKeyCol)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ucDestinationCol)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ugrpMapColumns)).BeginInit();
+            this.ugrpMapColumns.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ugMapColumns)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udsMapColumns)).BeginInit();
             this.SuspendLayout();
             // 
             // ultraTabPageControl1
@@ -358,6 +368,9 @@
             // 
             // upnlTop.ClientArea
             // 
+            this.upnlTop.ClientArea.Controls.Add(this.ubtnDelete);
+            this.upnlTop.ClientArea.Controls.Add(this.ubtnAdd);
+            this.upnlTop.ClientArea.Controls.Add(this.ugrpMapColumns);
             this.upnlTop.ClientArea.Controls.Add(this.ucAlgorithm);
             this.upnlTop.ClientArea.Controls.Add(this.ulblAlgorithm);
             this.upnlTop.ClientArea.Controls.Add(this.ucMapType);
@@ -366,7 +379,6 @@
             this.upnlTop.ClientArea.Controls.Add(this.ulblPercent);
             this.upnlTop.ClientArea.Controls.Add(this.ubtnMap);
             this.upnlTop.ClientArea.Controls.Add(this.ulblAccuracy);
-            this.upnlTop.ClientArea.Controls.Add(this.ulblSrcMatchCol);
             this.upnlTop.ClientArea.Controls.Add(this.ubtnSource);
             this.upnlTop.ClientArea.Controls.Add(this.utxtDestination);
             this.upnlTop.ClientArea.Controls.Add(this.utxtSource);
@@ -399,7 +411,7 @@
             valueListItem2,
             valueListItem3,
             valueListItem4});
-            this.ucAlgorithm.Location = new System.Drawing.Point(1077, 27);
+            this.ucAlgorithm.Location = new System.Drawing.Point(1079, 45);
             this.ucAlgorithm.Name = "ucAlgorithm";
             this.ucAlgorithm.Size = new System.Drawing.Size(168, 21);
             this.ucAlgorithm.TabIndex = 18;
@@ -408,7 +420,7 @@
             // 
             this.ulblAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ulblAlgorithm.AutoSize = true;
-            this.ulblAlgorithm.Location = new System.Drawing.Point(1020, 30);
+            this.ulblAlgorithm.Location = new System.Drawing.Point(1020, 49);
             this.ulblAlgorithm.Name = "ulblAlgorithm";
             this.ulblAlgorithm.Size = new System.Drawing.Size(55, 14);
             this.ulblAlgorithm.TabIndex = 19;
@@ -426,16 +438,16 @@
             this.ucMapType.Items.AddRange(new Infragistics.Win.ValueListItem[] {
             valueListItem5,
             valueListItem6});
-            this.ucMapType.Location = new System.Drawing.Point(923, 27);
+            this.ucMapType.Location = new System.Drawing.Point(1079, 18);
             this.ucMapType.Name = "ucMapType";
-            this.ucMapType.Size = new System.Drawing.Size(85, 21);
+            this.ucMapType.Size = new System.Drawing.Size(168, 21);
             this.ucMapType.TabIndex = 13;
             // 
             // ulblMapType
             // 
             this.ulblMapType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ulblMapType.AutoSize = true;
-            this.ulblMapType.Location = new System.Drawing.Point(865, 30);
+            this.ulblMapType.Location = new System.Drawing.Point(1018, 22);
             this.ulblMapType.Name = "ulblMapType";
             this.ulblMapType.Size = new System.Drawing.Size(58, 14);
             this.ulblMapType.TabIndex = 13;
@@ -446,7 +458,7 @@
             this.umeAccuracy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.umeAccuracy.EditAs = Infragistics.Win.UltraWinMaskedEdit.EditAsType.Integer;
             this.umeAccuracy.InputMask = "nnnnnnnnn";
-            this.umeAccuracy.Location = new System.Drawing.Point(1077, 83);
+            this.umeAccuracy.Location = new System.Drawing.Point(1077, 82);
             this.umeAccuracy.MaxValue = ((short)(100));
             this.umeAccuracy.MinValue = ((short)(0));
             this.umeAccuracy.Name = "umeAccuracy";
@@ -473,7 +485,7 @@
             // ubtnMap
             // 
             this.ubtnMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ubtnMap.Location = new System.Drawing.Point(1161, 81);
+            this.ubtnMap.Location = new System.Drawing.Point(1161, 79);
             this.ubtnMap.Name = "ubtnMap";
             this.ubtnMap.Size = new System.Drawing.Size(84, 23);
             this.ubtnMap.TabIndex = 13;
@@ -484,20 +496,11 @@
             // 
             this.ulblAccuracy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ulblAccuracy.AutoSize = true;
-            this.ulblAccuracy.Location = new System.Drawing.Point(1021, 85);
+            this.ulblAccuracy.Location = new System.Drawing.Point(1020, 85);
             this.ulblAccuracy.Name = "ulblAccuracy";
             this.ulblAccuracy.Size = new System.Drawing.Size(54, 14);
             this.ulblAccuracy.TabIndex = 12;
             this.ulblAccuracy.Text = "Accuracy:";
-            // 
-            // ulblSrcMatchCol
-            // 
-            this.ulblSrcMatchCol.AutoSize = true;
-            this.ulblSrcMatchCol.Location = new System.Drawing.Point(402, 31);
-            this.ulblSrcMatchCol.Name = "ulblSrcMatchCol";
-            this.ulblSrcMatchCol.Size = new System.Drawing.Size(80, 14);
-            this.ulblSrcMatchCol.TabIndex = 8;
-            this.ulblSrcMatchCol.Text = "Match Column:";
             // 
             // ubtnSource
             // 
@@ -533,59 +536,51 @@
             // 
             // ugrpSource
             // 
+            this.ugrpSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.ugrpSource.Controls.Add(this.ulblSrcKeyCol);
-            this.ugrpSource.Controls.Add(this.ucSourceCol);
             this.ugrpSource.Controls.Add(this.ucSourceKeyCol);
             this.ugrpSource.Location = new System.Drawing.Point(8, 6);
             this.ugrpSource.Name = "ugrpSource";
-            this.ugrpSource.Size = new System.Drawing.Size(853, 51);
+            this.ugrpSource.Size = new System.Drawing.Size(613, 51);
             this.ugrpSource.TabIndex = 16;
             this.ugrpSource.Text = "Source";
             // 
             // ulblSrcKeyCol
             // 
             this.ulblSrcKeyCol.AutoSize = true;
-            this.ulblSrcKeyCol.Location = new System.Drawing.Point(626, 24);
+            this.ulblSrcKeyCol.Location = new System.Drawing.Point(389, 24);
             this.ulblSrcKeyCol.Name = "ulblSrcKeyCol";
             this.ulblSrcKeyCol.Size = new System.Drawing.Size(69, 14);
             this.ulblSrcKeyCol.TabIndex = 14;
             this.ulblSrcKeyCol.Text = "Key Column:";
             // 
-            // ucSourceCol
-            // 
-            this.ucSourceCol.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
-            this.ucSourceCol.DropDownStyle = Infragistics.Win.DropDownStyle.DropDownList;
-            this.ucSourceCol.Location = new System.Drawing.Point(474, 21);
-            this.ucSourceCol.Name = "ucSourceCol";
-            this.ucSourceCol.Size = new System.Drawing.Size(144, 21);
-            this.ucSourceCol.TabIndex = 6;
-            // 
             // ucSourceKeyCol
             // 
             this.ucSourceKeyCol.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
             this.ucSourceKeyCol.DropDownStyle = Infragistics.Win.DropDownStyle.DropDownList;
-            this.ucSourceKeyCol.Location = new System.Drawing.Point(696, 21);
+            this.ucSourceKeyCol.Location = new System.Drawing.Point(459, 21);
             this.ucSourceKeyCol.Name = "ucSourceKeyCol";
             this.ucSourceKeyCol.Size = new System.Drawing.Size(144, 21);
             this.ucSourceKeyCol.TabIndex = 13;
             // 
             // ugrpDestination
             // 
+            this.ugrpDestination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.ugrpDestination.Controls.Add(this.ulblDesKeyCol);
             this.ugrpDestination.Controls.Add(this.ubtnDestination);
             this.ugrpDestination.Controls.Add(this.ucDestinationKeyCol);
-            this.ugrpDestination.Controls.Add(this.ulblDesMatchCol);
-            this.ugrpDestination.Controls.Add(this.ucDestinationCol);
             this.ugrpDestination.Location = new System.Drawing.Point(8, 62);
             this.ugrpDestination.Name = "ugrpDestination";
-            this.ugrpDestination.Size = new System.Drawing.Size(853, 51);
+            this.ugrpDestination.Size = new System.Drawing.Size(613, 51);
             this.ugrpDestination.TabIndex = 17;
             this.ugrpDestination.Text = "Destination";
             // 
             // ulblDesKeyCol
             // 
             this.ulblDesKeyCol.AutoSize = true;
-            this.ulblDesKeyCol.Location = new System.Drawing.Point(626, 22);
+            this.ulblDesKeyCol.Location = new System.Drawing.Point(389, 24);
             this.ulblDesKeyCol.Name = "ulblDesKeyCol";
             this.ulblDesKeyCol.Size = new System.Drawing.Size(69, 14);
             this.ulblDesKeyCol.TabIndex = 12;
@@ -607,28 +602,10 @@
             // 
             this.ucDestinationKeyCol.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
             this.ucDestinationKeyCol.DropDownStyle = Infragistics.Win.DropDownStyle.DropDownList;
-            this.ucDestinationKeyCol.Location = new System.Drawing.Point(696, 19);
+            this.ucDestinationKeyCol.Location = new System.Drawing.Point(459, 21);
             this.ucDestinationKeyCol.Name = "ucDestinationKeyCol";
             this.ucDestinationKeyCol.Size = new System.Drawing.Size(144, 21);
             this.ucDestinationKeyCol.TabIndex = 11;
-            // 
-            // ulblDesMatchCol
-            // 
-            this.ulblDesMatchCol.AutoSize = true;
-            this.ulblDesMatchCol.Location = new System.Drawing.Point(394, 23);
-            this.ulblDesMatchCol.Name = "ulblDesMatchCol";
-            this.ulblDesMatchCol.Size = new System.Drawing.Size(80, 14);
-            this.ulblDesMatchCol.TabIndex = 9;
-            this.ulblDesMatchCol.Text = "Match Column:";
-            // 
-            // ucDestinationCol
-            // 
-            this.ucDestinationCol.AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
-            this.ucDestinationCol.DropDownStyle = Infragistics.Win.DropDownStyle.DropDownList;
-            this.ucDestinationCol.Location = new System.Drawing.Point(474, 19);
-            this.ucDestinationCol.Name = "ucDestinationCol";
-            this.ucDestinationCol.Size = new System.Drawing.Size(144, 21);
-            this.ucDestinationCol.TabIndex = 7;
             // 
             // _FuzzyMapper_UltraFormManager_Dock_Area_Left
             // 
@@ -685,6 +662,69 @@
             // 
             this.openFileDialog2.Filter = "Excel Files| *.xlsx;*xls;*xlsm";
             // 
+            // ugrpMapColumns
+            // 
+            this.ugrpMapColumns.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.ugrpMapColumns.CaptionAlignment = Infragistics.Win.Misc.GroupBoxCaptionAlignment.Center;
+            this.ugrpMapColumns.Controls.Add(this.ugMapColumns);
+            this.ugrpMapColumns.Location = new System.Drawing.Point(627, 6);
+            this.ugrpMapColumns.Name = "ugrpMapColumns";
+            this.ugrpMapColumns.Size = new System.Drawing.Size(299, 107);
+            this.ugrpMapColumns.TabIndex = 20;
+            this.ugrpMapColumns.Text = "Map Columns";
+            // 
+            // ugMapColumns
+            // 
+            this.ugMapColumns.DataSource = this.udsMapColumns;
+            ultraGridColumn1.Header.VisiblePosition = 0;
+            ultraGridColumn1.Width = 129;
+            ultraGridColumn2.Header.VisiblePosition = 1;
+            ultraGridColumn2.Width = 126;
+            ultraGridColumn3.Header.VisiblePosition = 2;
+            ultraGridColumn3.Hidden = true;
+            ultraGridBand1.Columns.AddRange(new object[] {
+            ultraGridColumn1,
+            ultraGridColumn2,
+            ultraGridColumn3});
+            this.ugMapColumns.DisplayLayout.BandsSerializer.Add(ultraGridBand1);
+            this.ugMapColumns.DisplayLayout.CaptionVisible = Infragistics.Win.DefaultableBoolean.False;
+            this.ugMapColumns.DisplayLayout.Override.AllowAddNew = Infragistics.Win.UltraWinGrid.AllowAddNew.Yes;
+            this.ugMapColumns.DisplayLayout.Override.AllowDelete = Infragistics.Win.DefaultableBoolean.True;
+            this.ugMapColumns.DisplayLayout.Override.AllowUpdate = Infragistics.Win.DefaultableBoolean.True;
+            this.ugMapColumns.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ugMapColumns.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ugMapColumns.Location = new System.Drawing.Point(3, 16);
+            this.ugMapColumns.Name = "ugMapColumns";
+            this.ugMapColumns.Size = new System.Drawing.Size(293, 88);
+            this.ugMapColumns.TabIndex = 0;
+            this.ugMapColumns.Text = "ultraGrid1";
+            // 
+            // udsMapColumns
+            // 
+            this.udsMapColumns.Band.Columns.AddRange(new object[] {
+            ultraDataColumn1,
+            ultraDataColumn2,
+            ultraDataColumn3});
+            // 
+            // ubtnAdd
+            // 
+            this.ubtnAdd.Location = new System.Drawing.Point(932, 16);
+            this.ubtnAdd.Name = "ubtnAdd";
+            this.ubtnAdd.Size = new System.Drawing.Size(55, 23);
+            this.ubtnAdd.TabIndex = 21;
+            this.ubtnAdd.Text = "Add";
+            this.ubtnAdd.Click += new System.EventHandler(this.ubtnAdd_Click);
+            // 
+            // ubtnDelete
+            // 
+            this.ubtnDelete.Location = new System.Drawing.Point(932, 47);
+            this.ubtnDelete.Name = "ubtnDelete";
+            this.ubtnDelete.Size = new System.Drawing.Size(55, 23);
+            this.ubtnDelete.TabIndex = 22;
+            this.ubtnDelete.Text = "Delete";
+            this.ubtnDelete.Click += new System.EventHandler(this.ubtnDelete_Click);
+            // 
             // FuzzyMapper
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -723,13 +763,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.ugrpSource)).EndInit();
             this.ugrpSource.ResumeLayout(false);
             this.ugrpSource.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ucSourceCol)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ucSourceKeyCol)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ugrpDestination)).EndInit();
             this.ugrpDestination.ResumeLayout(false);
             this.ugrpDestination.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ucDestinationKeyCol)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ucDestinationCol)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ugrpMapColumns)).EndInit();
+            this.ugrpMapColumns.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ugMapColumns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.udsMapColumns)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -752,16 +794,12 @@
         private Infragistics.Win.Misc.UltraButton ubtnDestination;
         private Infragistics.Win.Misc.UltraButton ubtnSource;
         private System.Windows.Forms.ImageList imageList1;
-        private Infragistics.Win.UltraWinEditors.UltraComboEditor ucDestinationCol;
-        private Infragistics.Win.UltraWinEditors.UltraComboEditor ucSourceCol;
-        private Infragistics.Win.Misc.UltraLabel ulblDesMatchCol;
         private Infragistics.Win.UltraWinGrid.UltraGrid ugSource;
         private Infragistics.Win.AppStyling.Runtime.AppStylistRuntime appStylistRuntime1;
         private Infragistics.Win.UltraWinMaskedEdit.UltraMaskedEdit umeAccuracy;
         private Infragistics.Win.Misc.UltraLabel ulblPercent;
         private Infragistics.Win.Misc.UltraButton ubtnMap;
         private Infragistics.Win.Misc.UltraLabel ulblAccuracy;
-        private Infragistics.Win.Misc.UltraLabel ulblSrcMatchCol;
         private Infragistics.Win.Misc.UltraGroupBox ugrpSource;
         private Infragistics.Win.Misc.UltraGroupBox ugrpDestination;
         private Infragistics.Win.Misc.UltraLabel ulblDesKeyCol;
@@ -784,6 +822,11 @@
         private Infragistics.Win.UltraWinGrid.ExcelExport.UltraGridExcelExporter ultraGridExcelExporter1;
         private Infragistics.Win.UltraWinEditors.UltraComboEditor ucAlgorithm;
         private Infragistics.Win.Misc.UltraLabel ulblAlgorithm;
+        private Infragistics.Win.Misc.UltraGroupBox ugrpMapColumns;
+        private Infragistics.Win.UltraWinGrid.UltraGrid ugMapColumns;
+        private Infragistics.Win.UltraWinDataSource.UltraDataSource udsMapColumns;
+        private Infragistics.Win.Misc.UltraButton ubtnDelete;
+        private Infragistics.Win.Misc.UltraButton ubtnAdd;
     }
 }
 
