@@ -1,5 +1,6 @@
 ﻿using Infragistics.Documents.Excel;
 using Infragistics.Win;
+using Infragistics.Win.UltraWinEditors;
 using Infragistics.Win.UltraWinGrid;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,12 @@ namespace FuzzyMapper
 
         #region Private Methods
 
+        /// <summary>
+        /// Reads the provided excel & sheet and returns a DataTable. If no sheet name is provided then the first sheet of the excel is chosen.
+        /// </summary>
+        /// <param name="excelname"></param>
+        /// <param name="sheetname"></param>
+        /// <returns>DataTable</returns>
         private DataTable LoadExcel(string excelname, string sheetname = "")
         {
             var excelDataTable = new DataTable();
@@ -138,7 +145,15 @@ namespace FuzzyMapper
             return excelDataTable;
         }
 
-        private void AddResultRow(UltraGridRow row, DataTable dt, string key, string keyCol, string colprefix = "")
+        /// <summary>
+        /// Update's the specified grid row cells with the values from the provided DataTable using the specified key column name and value
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="dt"></param>
+        /// <param name="key"></param>
+        /// <param name="keyCol"></param>
+        /// <param name="colPrefix"></param>
+        private void UpdateResultRow(UltraGridRow row, DataTable dt, string key, string keyCol, string colPrefix = "")
         {
             try
             {
@@ -150,12 +165,11 @@ namespace FuzzyMapper
                     {
                         Double dbl = 0;
                         Double.TryParse(DestinationRow[col.ColumnName].ToString(), out dbl);
-                        row.Cells[colprefix + col.ColumnName].Value = dbl;
+                        row.Cells[colPrefix + col.ColumnName].Value = dbl;
                     }
                     else
-                        row.Cells[colprefix + col.ColumnName].Value = DestinationRow[col.ColumnName].ToString();
-                }
-                row.Cells["Map%"].Value = umeAccuracy.Text;
+                        row.Cells[colPrefix + col.ColumnName].Value = DestinationRow[col.ColumnName].ToString();
+                }                
             }
             catch (Exception)
             {
@@ -163,11 +177,15 @@ namespace FuzzyMapper
             }
         }
 
-        private void UpdateGridRowCounts(UltraGrid ug)
+        /// <summary>
+        /// Updates the grid header with the total row count and the visible row count
+        /// </summary>
+        /// <param name="uGrid"></param>
+        private void UpdateGridRowCounts(UltraGrid uGrid)
         {
             try
             {
-                ug.Text = (ug.Rows.Count).ToString() + " Row(s) / " + (ug.Rows.VisibleRowCount - 1).ToString() + " Visible Row(s)";
+                uGrid.Text = (uGrid.Rows.Count).ToString() + " Row(s) / " + (uGrid.Rows.VisibleRowCount - 1).ToString() + " Visible Row(s)";
             }
             catch (Exception)
             {
@@ -175,6 +193,38 @@ namespace FuzzyMapper
             }
         }
 
+
+        private bool LoadGrid(UltraGrid uGrid,ref DataTable dt,string excelName,string columnType,UltraComboEditor uCombo)
+        {
+            try
+            {
+                uGrid.DataSource = null;
+                dt = LoadExcel(excelName);
+                uGrid.DataSource = dt;
+                ValueList colValueList = new ValueList();
+
+                uCombo.Items.Clear();
+
+                foreach (DataColumn col in dt.Columns)
+                {
+                    colValueList.ValueListItems.Add(col.ColumnName, col.ColumnName);
+                    uCombo.Items.Add(col.ColumnName, col.ColumnName);
+                }
+                this.udsMapColumns.Rows.Clear();
+
+                this.ugMapColumns.DisplayLayout.Bands[0].Columns[columnType].ValueList = colValueList;
+                this.ugMapColumns.DisplayLayout.Bands[0].Columns[columnType].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.DropDownValidate;
+                this.ugMapColumns.DisplayLayout.Bands[0].Columns[columnType].AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
+
+                uCombo.SelectedIndex = 0;
+                UpdateGridRowCounts(uGrid);
+            }
+            catch (Exception)
+            {
+                throw;                
+            }
+            return true;
+        }
         #endregion Private Methods
 
         #region Events
@@ -189,29 +239,8 @@ namespace FuzzyMapper
                 if (!this.utxtSource.Text.Equals(""))
                 {
                     this.Cursor = Cursors.WaitCursor;
-
-                    this.ugSource.DataSource = null;
-                    SourceDataTable = LoadExcel(this.utxtSource.Text);
-                    this.ugSource.DataSource = SourceDataTable;
-                    ValueList ucSourceCol = new ValueList();
-                    //this.ucSourceCol.Items.Clear();
-                    this.ucSourceKeyCol.Items.Clear();
-
-                    foreach (DataColumn col in SourceDataTable.Columns)
-                    {
-                        ucSourceCol.ValueListItems.Add(col.ColumnName, col.ColumnName);
-                        this.ucSourceKeyCol.Items.Add(col.ColumnName, col.ColumnName);
-                    }
-                    this.udsMapColumns.Rows.Clear();
-
-                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["SourceColumn"].ValueList = ucSourceCol;
-                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["SourceColumn"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.DropDownValidate;
-                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["SourceColumn"].AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
-
-                    this.ucSourceKeyCol.SelectedIndex = 0;
-
+                    LoadGrid(this.ugSource, ref SourceDataTable, this.utxtSource.Text, "SourceColumn", this.ucSourceKeyCol);
                     this.utcTabControl.SelectedTab = this.ultraTabPageControl1.Tab;
-                    UpdateGridRowCounts(this.ugSource);
                 }
             }
             catch (Exception)
@@ -232,29 +261,9 @@ namespace FuzzyMapper
                 this.utxtDestination.Text = this.openFileDialog2.FileName;
                 if (!this.utxtDestination.Text.Equals(""))
                 {
-                    this.Cursor = Cursors.WaitCursor;
-
-                    DestinationDataTable = LoadExcel(this.utxtDestination.Text);
-                    this.ugDestination.DataSource = DestinationDataTable;
-                    //this.ucDestinationCol.Items.Clear();
-                    this.ucDestinationKeyCol.Items.Clear();
-                    ValueList ucDestinationCol = new ValueList();
-
-                    foreach (DataColumn col in DestinationDataTable.Columns)
-                    {
-                        ucDestinationCol.ValueListItems.Add(col.ColumnName, col.ColumnName);
-                        //this.ucDestinationCol.Items.Add(col.ColumnName, col.ColumnName);
-                        this.ucDestinationKeyCol.Items.Add(col.ColumnName, col.ColumnName);
-                    }
-                    this.udsMapColumns.Rows.Clear();
-
-                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["DestinationColumn"].ValueList = ucDestinationCol;
-                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["DestinationColumn"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.DropDownValidate;
-                    this.ugMapColumns.DisplayLayout.Bands[0].Columns["DestinationColumn"].AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
-                    //this.ucDestinationCol.SelectedIndex = 0;
-                    this.ucDestinationKeyCol.SelectedIndex = 0;
+                    this.Cursor = Cursors.WaitCursor;                   
+                    LoadGrid(this.ugDestination, ref DestinationDataTable, this.utxtDestination.Text, "DestinationColumn", this.ucDestinationKeyCol);
                     this.utcTabControl.SelectedTab = this.ultraTabPageControl2.Tab;
-                    UpdateGridRowCounts(this.ugDestination);
                 }
             }
             catch (Exception)
@@ -302,7 +311,6 @@ namespace FuzzyMapper
                         {
                             this.ugResults.DisplayLayout.Bands[0].Columns.Add("Des-" + col.ColumnName);
                         }
-                        this.ugResults.DisplayLayout.Bands[0].Columns.Add("Map%");
 
                         this.upbProgressBar.Step = 1;
                         this.upbProgressBar.Maximum = this.ugResults.Rows.Count;
@@ -356,7 +364,7 @@ namespace FuzzyMapper
                                             ExactMatches.Add(intersectValues.FirstOrDefault(), "");
                                     }
                                     if (ExactMatches.Count > 0)
-                                        AddResultRow(row, this.DestinationDataTable, ExactMatches.FirstOrDefault().Key, this.ucDestinationKeyCol.SelectedItem.DisplayText, "Des-");
+                                        UpdateResultRow(row, this.DestinationDataTable, ExactMatches.FirstOrDefault().Key, this.ucDestinationKeyCol.SelectedItem.DisplayText, "Des-");
                                 }
                                 catch (Exception)
                                 {
@@ -375,7 +383,6 @@ namespace FuzzyMapper
                             if (this.ugResults.DisplayLayout.Bands[0].Columns.IndexOf("Des-" + col.ColumnName) < 0)
                                 this.ugResults.DisplayLayout.Bands[0].Columns.Add("Des-" + col.ColumnName);
                         }
-                        this.ugResults.DisplayLayout.Bands[0].Columns.Add("Map%");
 
                         this.upbProgressBar.Step = 1;
                         this.upbProgressBar.Maximum = this.ugSource.Rows.Count;
@@ -428,8 +435,8 @@ namespace FuzzyMapper
                                     DataRow dr = dtResults.NewRow();
                                     dtResults.Rows.Add(dr);
 
-                                    AddResultRow(this.ugResults.Rows[dtResults.Rows.IndexOf(dr)], this.DestinationDataTable, item.Key, this.ucDestinationKeyCol.SelectedItem.DisplayText, "Des-");
-                                    AddResultRow(this.ugResults.Rows[dtResults.Rows.IndexOf(dr)], this.SourceDataTable, row.Cells[this.ucSourceKeyCol.SelectedItem.DisplayText].Value.ToString(), this.ucSourceKeyCol.SelectedItem.DisplayText);
+                                    UpdateResultRow(this.ugResults.Rows[dtResults.Rows.IndexOf(dr)], this.DestinationDataTable, item.Key, this.ucDestinationKeyCol.SelectedItem.DisplayText, "Des-");
+                                    UpdateResultRow(this.ugResults.Rows[dtResults.Rows.IndexOf(dr)], this.SourceDataTable, row.Cells[this.ucSourceKeyCol.SelectedItem.DisplayText].Value.ToString(), this.ucSourceKeyCol.SelectedItem.DisplayText);
                                 }
                             }
                         }
