@@ -1,17 +1,11 @@
 ﻿using Infragistics.Documents.Excel;
 using Infragistics.Win;
-using Infragistics.Win.UltraWinEditors;
 using Infragistics.Win.UltraWinGrid;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.OleDb;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FuzzyMapper
@@ -29,10 +23,10 @@ namespace FuzzyMapper
         }
 
         #region Private Methods
-        
+
         private DataTable LoadExcel(string excelname, string sheetname = "")
         {
-            DataTable excelDataTable = new DataTable();
+            var excelDataTable = new DataTable();
             try
             {
                 this.Cursor = Cursors.WaitCursor;
@@ -49,8 +43,8 @@ namespace FuzzyMapper
                     {
                         theWorksheet = theWorkbook.Worksheets[sheetname];
                     }
-                    
-                    //We will place the Excel Data into this DataTable                    
+
+                    //We will place the Excel Data into this DataTable
 
                     int theRowCounter = 0;
                     int theCellCounter = 0;
@@ -64,12 +58,11 @@ namespace FuzzyMapper
                         this.upbProgressBar.PerformStep();
                         if (theRowCounter == 0)
                         {
-                            //This is the Header Row. We are assuming that the Excel Worksheet's 
-                            //first row contains the schema of our soon to be data model. 
+                            //This is the Header Row. We are assuming that the Excel Worksheet's
+                            //first row contains the schema of our soon to be data model.
                             //We will use this information to build our DataTable's schema
                             foreach (WorksheetCell theWorksheetCell in theWorksheetRow.Cells)
                             {
-
                                 string theCellValue = theWorksheetCell.Value.ToString().Trim();
 
                                 if (theCellValue != string.Empty)
@@ -82,9 +75,8 @@ namespace FuzzyMapper
                                     //as the Column Name
                                     theDataColumn.ColumnName = theCellValue;
 
-
                                     theDataColumn.DataType = Type.GetType("System.String");
-                                        //theWorksheet.Rows[theRowCounter + 1].Cells[theCellCounter].Value.GetType();
+                                    //theWorksheet.Rows[theRowCounter + 1].Cells[theCellCounter].Value.GetType();
                                 }
                                 else
                                 {
@@ -101,7 +93,7 @@ namespace FuzzyMapper
                         {
                             theCellCounter = 0;
 
-                            //Add a new empty data row to our data model        
+                            //Add a new empty data row to our data model
                             DataRow theDataRow = excelDataTable.NewRow();
 
                             //iterate through each current Worksheet cell and populate the new data row.
@@ -133,20 +125,17 @@ namespace FuzzyMapper
                     //AcceptChanges so that these do not appear to be NEW rows
                     excelDataTable.AcceptChanges();
                 }
-
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw e;
+                throw;
             }
             finally
             {
                 this.Cursor = Cursors.Default;
                 this.upbProgressBar.Value = 0;
-
             }
             return excelDataTable;
-
         }
 
         private void AddResultRow(UltraGridRow row, DataTable dt, string key, string keyCol, string colprefix = "")
@@ -162,19 +151,15 @@ namespace FuzzyMapper
                         Double dbl = 0;
                         Double.TryParse(DestinationRow[col.ColumnName].ToString(), out dbl);
                         row.Cells[colprefix + col.ColumnName].Value = dbl;
-
                     }
                     else
                         row.Cells[colprefix + col.ColumnName].Value = DestinationRow[col.ColumnName].ToString();
-
                 }
                 row.Cells["Map%"].Value = umeAccuracy.Text;
-
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
-                throw e;
+                throw;
             }
         }
 
@@ -182,17 +167,18 @@ namespace FuzzyMapper
         {
             try
             {
-                ug.Text = (ug.Rows.Count).ToString() + " Row(s) / " + (ug.Rows.VisibleRowCount-1).ToString() + " Visible Row(s)";
+                ug.Text = (ug.Rows.Count).ToString() + " Row(s) / " + (ug.Rows.VisibleRowCount - 1).ToString() + " Visible Row(s)";
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-        #endregion
+
+        #endregion Private Methods
 
         #region Events
+
         private void ubtnSource_Click(object sender, EventArgs e)
         {
             try
@@ -221,7 +207,7 @@ namespace FuzzyMapper
                     this.ugMapColumns.DisplayLayout.Bands[0].Columns["SourceColumn"].ValueList = ucSourceCol;
                     this.ugMapColumns.DisplayLayout.Bands[0].Columns["SourceColumn"].Style = Infragistics.Win.UltraWinGrid.ColumnStyle.DropDownValidate;
                     this.ugMapColumns.DisplayLayout.Bands[0].Columns["SourceColumn"].AutoCompleteMode = Infragistics.Win.AutoCompleteMode.SuggestAppend;
-                    
+
                     this.ucSourceKeyCol.SelectedIndex = 0;
 
                     this.utcTabControl.SelectedTab = this.ultraTabPageControl1.Tab;
@@ -237,7 +223,7 @@ namespace FuzzyMapper
                 this.Cursor = Cursors.Default;
             }
         }
-      
+
         private void ubtnDestination_Click(object sender, EventArgs e)
         {
             try
@@ -269,26 +255,23 @@ namespace FuzzyMapper
                     this.ucDestinationKeyCol.SelectedIndex = 0;
                     this.utcTabControl.SelectedTab = this.ultraTabPageControl2.Tab;
                     UpdateGridRowCounts(this.ugDestination);
-
                 }
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
             {
-                    this.Cursor = Cursors.Default;
+                this.Cursor = Cursors.Default;
             }
-        }                     
+        }
 
         private void ubtnMap_Click(object sender, EventArgs e)
         {
             try
             {
                 string source = "";
-
 
                 if (this.SourceDataTable != null && this.DestinationDataTable != null)
                 {
@@ -298,22 +281,19 @@ namespace FuzzyMapper
                     this.upbProgressBar.Value = 0;
                     this.upbProgressBar.Minimum = 0;
                     Dictionary<string, string> DestinationValues = default(Dictionary<string, string>);
-                    Dictionary<int, Dictionary<string,string>> DestinationValueLists = new Dictionary<int, Dictionary<string, string>>();
+                    Dictionary<int, Dictionary<string, string>> DestinationValueLists = new Dictionary<int, Dictionary<string, string>>();
 
                     foreach (UltraGridRow urow in this.ugMapColumns.Rows)
                     {
-
                         DestinationValues = this.DestinationDataTable.AsEnumerable().Select(row => new
                         {
                             attribute1_name = row[this.ucDestinationKeyCol.SelectedItem.DisplayText].ToString(),
                             attribute2_name = row[urow.Cells["DestinationColumn"].Value.ToString()].ToString()
                         }).Distinct().ToDictionary(s => s.attribute1_name, s => s.attribute2_name);
 
-
                         DestinationValueLists.Add(urow.Index, DestinationValues);
                     }
-                    
-                    
+
                     if (this.ucMapType.SelectedItem.DisplayText.Equals("Map"))
                     {
                         this.ugResults.DataSource = null;
@@ -324,9 +304,8 @@ namespace FuzzyMapper
                         }
                         this.ugResults.DisplayLayout.Bands[0].Columns.Add("Map%");
 
-
                         this.upbProgressBar.Step = 1;
-                        this.upbProgressBar.Maximum= this.ugResults.Rows.Count;
+                        this.upbProgressBar.Maximum = this.ugResults.Rows.Count;
 
                         foreach (UltraGridRow row in this.ugResults.Rows)
                         {
@@ -348,13 +327,11 @@ namespace FuzzyMapper
                                         break;
                                     }
                                     FoundMatchList.Add(urow.Index, FoundMatches);
-
                                 }
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
-
-                                throw ex;
+                                throw;
                             }
 
                             if (matchFound)
@@ -375,16 +352,15 @@ namespace FuzzyMapper
                                             var next = new Dictionary<string, string>(FoundMatchList[i + 1]);
                                             intersectValues = next.Keys.Where(x => intersectValues.Contains(x)).ToList();
                                         }
-                                        if(intersectValues.Count>0)
+                                        if (intersectValues.Count > 0)
                                             ExactMatches.Add(intersectValues.FirstOrDefault(), "");
-
                                     }
                                     if (ExactMatches.Count > 0)
                                         AddResultRow(row, this.DestinationDataTable, ExactMatches.FirstOrDefault().Key, this.ucDestinationKeyCol.SelectedItem.DisplayText, "Des-");
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
-                                    throw ex;
+                                    throw;
                                 }
                             }
                         }
@@ -400,7 +376,6 @@ namespace FuzzyMapper
                                 this.ugResults.DisplayLayout.Bands[0].Columns.Add("Des-" + col.ColumnName);
                         }
                         this.ugResults.DisplayLayout.Bands[0].Columns.Add("Map%");
-
 
                         this.upbProgressBar.Step = 1;
                         this.upbProgressBar.Maximum = this.ugSource.Rows.Count;
@@ -446,10 +421,8 @@ namespace FuzzyMapper
                                         if (!ExactMatches.ContainsKey(item))
                                             ExactMatches.Add(item, "");
                                     }
-                                    
-                                   
                                 }
-                                
+
                                 foreach (var item in ExactMatches)
                                 {
                                     DataRow dr = dtResults.NewRow();
@@ -462,13 +435,11 @@ namespace FuzzyMapper
                         }
                     }
                     this.utcTabControl.SelectedTab = this.ultraTabPageControl3.Tab;
-
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
-                throw ex;
+                throw;
             }
             finally
             {
@@ -478,7 +449,7 @@ namespace FuzzyMapper
                 this.upbProgressBar.Value = 0;
             }
         }
-                
+
         private void ubtnExport_Click(object sender, EventArgs e)
         {
             try
@@ -492,7 +463,7 @@ namespace FuzzyMapper
                 if (savefile.ShowDialog() == DialogResult.OK)
                 {
                     this.Cursor = Cursors.WaitCursor;
-                    
+
                     if (this.utcTabControl.ActiveTab == this.ultraTabPageControl1.Tab)
                         this.ultraGridExcelExporter1.Export(this.ugSource, savefile.FileName);
                     else if (this.utcTabControl.ActiveTab == this.ultraTabPageControl2.Tab)
@@ -505,7 +476,6 @@ namespace FuzzyMapper
             }
             catch (Exception)
             {
-
                 throw;
             }
             finally
@@ -524,23 +494,21 @@ namespace FuzzyMapper
             this.ugMapColumns.DeleteSelectedRows();
         }
 
-        #endregion
+        #endregion Events
 
         private void ugSource_AfterRowFilterChanged(object sender, AfterRowFilterChangedEventArgs e)
         {
-            UpdateGridRowCounts(this.ugSource);
+            UpdateGridRowCounts(ugSource);
         }
-
-        
 
         private void ugDestination_AfterRowFilterChanged(object sender, AfterRowFilterChangedEventArgs e)
         {
-            UpdateGridRowCounts(this.ugDestination);
+            UpdateGridRowCounts(ugDestination);
         }
 
         private void ugResults_AfterRowFilterChanged(object sender, AfterRowFilterChangedEventArgs e)
         {
-            UpdateGridRowCounts(this.ugResults);
+            UpdateGridRowCounts(ugResults);
         }
     }
 }

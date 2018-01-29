@@ -349,9 +349,9 @@
             // ubtnExport
             // 
             this.ubtnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ubtnExport.Location = new System.Drawing.Point(1163, 5);
+            this.ubtnExport.Location = new System.Drawing.Point(1148, 5);
             this.ubtnExport.Name = "ubtnExport";
-            this.ubtnExport.Size = new System.Drawing.Size(84, 23);
+            this.ubtnExport.Size = new System.Drawing.Size(66, 23);
             this.ubtnExport.TabIndex = 18;
             this.ubtnExport.Text = "Export";
             this.ubtnExport.Click += new System.EventHandler(this.ubtnExport_Click);
@@ -373,9 +373,7 @@
             this.upnlTop.ClientArea.Controls.Add(this.ubtnDelete);
             this.upnlTop.ClientArea.Controls.Add(this.ubtnAdd);
             this.upnlTop.ClientArea.Controls.Add(this.ugrpMapColumns);
-            this.upnlTop.ClientArea.Controls.Add(this.ucAlgorithm);
             this.upnlTop.ClientArea.Controls.Add(this.ulblPercent);
-            this.upnlTop.ClientArea.Controls.Add(this.ulblAccuracy);
             this.upnlTop.ClientArea.Controls.Add(this.ubtnSource);
             this.upnlTop.ClientArea.Controls.Add(this.utxtDestination);
             this.upnlTop.ClientArea.Controls.Add(this.utxtSource);
@@ -403,16 +401,16 @@
             valueListItem1,
             valueListItem2,
             valueListItem4});
-            this.ucAlgorithm.Location = new System.Drawing.Point(1079, 51);
+            this.ucAlgorithm.Location = new System.Drawing.Point(72, 44);
             this.ucAlgorithm.Name = "ucAlgorithm";
-            this.ucAlgorithm.Size = new System.Drawing.Size(168, 21);
+            this.ucAlgorithm.Size = new System.Drawing.Size(156, 21);
             this.ucAlgorithm.TabIndex = 18;
             // 
             // ulblAlgorithm
             // 
             this.ulblAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ulblAlgorithm.AutoSize = true;
-            this.ulblAlgorithm.Location = new System.Drawing.Point(17, 49);
+            this.ulblAlgorithm.Location = new System.Drawing.Point(16, 49);
             this.ulblAlgorithm.Name = "ulblAlgorithm";
             this.ulblAlgorithm.Size = new System.Drawing.Size(55, 14);
             this.ulblAlgorithm.TabIndex = 19;
@@ -430,9 +428,9 @@
             this.ucMapType.Items.AddRange(new Infragistics.Win.ValueListItem[] {
             valueListItem5,
             valueListItem6});
-            this.ucMapType.Location = new System.Drawing.Point(73, 19);
+            this.ucMapType.Location = new System.Drawing.Point(72, 19);
             this.ucMapType.Name = "ucMapType";
-            this.ucMapType.Size = new System.Drawing.Size(168, 21);
+            this.ucMapType.Size = new System.Drawing.Size(156, 21);
             this.ucMapType.TabIndex = 13;
             // 
             // ulblMapType
@@ -450,14 +448,14 @@
             this.umeAccuracy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.umeAccuracy.EditAs = Infragistics.Win.UltraWinMaskedEdit.EditAsType.Integer;
             this.umeAccuracy.InputMask = "nnnnnnnnn";
-            this.umeAccuracy.Location = new System.Drawing.Point(73, 77);
+            this.umeAccuracy.Location = new System.Drawing.Point(72, 77);
             this.umeAccuracy.MaxValue = ((short)(100));
             this.umeAccuracy.MinValue = ((short)(0));
             this.umeAccuracy.Name = "umeAccuracy";
             this.umeAccuracy.Nullable = false;
             this.umeAccuracy.NullText = "";
             this.umeAccuracy.PromptChar = ' ';
-            this.umeAccuracy.Size = new System.Drawing.Size(45, 20);
+            this.umeAccuracy.Size = new System.Drawing.Size(48, 20);
             this.umeAccuracy.SpinButtonDisplayStyle = Infragistics.Win.SpinButtonDisplayStyle.OnRight;
             this.umeAccuracy.SpinIncrement = ((short)(1));
             this.umeAccuracy.SpinWrap = true;
@@ -469,7 +467,7 @@
             this.ulblPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ulblPercent.AutoSize = true;
             this.ulblPercent.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ulblPercent.Location = new System.Drawing.Point(1124, 87);
+            this.ulblPercent.Location = new System.Drawing.Point(1118, 87);
             this.ulblPercent.Name = "ulblPercent";
             this.ulblPercent.Size = new System.Drawing.Size(14, 14);
             this.ulblPercent.TabIndex = 14;
@@ -478,9 +476,9 @@
             // ubtnMap
             // 
             this.ubtnMap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ubtnMap.Location = new System.Drawing.Point(157, 73);
+            this.ubtnMap.Location = new System.Drawing.Point(162, 75);
             this.ubtnMap.Name = "ubtnMap";
-            this.ubtnMap.Size = new System.Drawing.Size(84, 23);
+            this.ubtnMap.Size = new System.Drawing.Size(66, 23);
             this.ubtnMap.TabIndex = 13;
             this.ubtnMap.Text = "Auto Map";
             this.ubtnMap.Click += new System.EventHandler(this.ubtnMap_Click);
@@ -489,7 +487,7 @@
             // 
             this.ulblAccuracy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ulblAccuracy.AutoSize = true;
-            this.ulblAccuracy.Location = new System.Drawing.Point(1022, 85);
+            this.ulblAccuracy.Location = new System.Drawing.Point(17, 80);
             this.ulblAccuracy.Name = "ulblAccuracy";
             this.ulblAccuracy.Size = new System.Drawing.Size(54, 14);
             this.ulblAccuracy.TabIndex = 12;
@@ -719,11 +717,13 @@
             this.ugbAutoMap.Controls.Add(this.ulblMapType);
             this.ugbAutoMap.Controls.Add(this.ucMapType);
             this.ugbAutoMap.Controls.Add(this.ulblAlgorithm);
+            this.ugbAutoMap.Controls.Add(this.ucAlgorithm);
             this.ugbAutoMap.Controls.Add(this.ubtnMap);
             this.ugbAutoMap.Controls.Add(this.umeAccuracy);
-            this.ugbAutoMap.Location = new System.Drawing.Point(1006, 6);
+            this.ugbAutoMap.Controls.Add(this.ulblAccuracy);
+            this.ugbAutoMap.Location = new System.Drawing.Point(999, 6);
             this.ugbAutoMap.Name = "ugbAutoMap";
-            this.ugbAutoMap.Size = new System.Drawing.Size(244, 107);
+            this.ugbAutoMap.Size = new System.Drawing.Size(246, 107);
             this.ugbAutoMap.TabIndex = 23;
             this.ugbAutoMap.Text = "Auto Map Settings";
             // 
